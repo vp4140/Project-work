@@ -1,0 +1,126 @@
+<form #empForm="ngForm">
+  <div class="container common-address">
+    <div class="panel panel-primary">
+      <div class="panel-heading pointerCursor" (click)="panleExpanded =!panleExpanded"
+        style="background-color: #63C7DB ;">
+        <h6 class="panel-title" style="padding:10px;color:white">
+          Billing Address </h6>
+      </div>
+
+      <div class="card border box" style="padding: 15px;"
+        *ngIf="panleExpanded && service.activeStep2 && !service.userVerifiedDisplay">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="exampleInputEmail1">Name</label>
+            <input type="text" class="form-control" id="firstname" name="sss" readonly
+              [(ngModel)]="service.userBillingAddress.name" aria-describedby="nameHelp">
+          </div>
+
+
+          <div class="form-group col-md-6"
+            [class.has-error]="fullClinicNameControl.invalid && fullClinicNameControl.touched"
+            [class.has-success]="fullClinicNameControl.valid">
+            <label for="clinicname" class="control-label">Clinic Name <span style="color: red;">*</span></label>
+            <input type="text" class="form-control" id="clinicname" name="clinic" required
+              #fullClinicNameControl="ngModel" [(ngModel)]="service.userBillingAddress.clinicName"
+              aria-describedby="clinicnameHelp">
+            <span class="help-block" style="color: red;"
+              *ngIf="fullClinicNameControl.invalid && fullClinicNameControl.touched">
+              Clinic Name is required
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="clinicname" class="control-label">Block No.</label>
+            <input type="text" class="form-control" id="blockno" name="block" #fullBlockControl="ngModel"
+              [(ngModel)]="service.userBillingAddress.blockNo" aria-describedby="blocknoHelp">
+            <!-- <span class="help-block" style="color: red;" *ngIf="fullBlockControl.invalid && fullBlockControl.touched">
+              Block is required
+            </span> -->
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="clinicname" class="control-label">Floor No.</label>
+            <input type="text" class="form-control" id="floorno" #fullFloorControl="ngModel" name="floor"
+              [(ngModel)]="service.userBillingAddress.floorNo" aria-describedby="floornoHelp">
+            <!-- <span class="help-block" style="color: red;" *ngIf="fullFloorControl.invalid && fullFloorControl.touched">
+              Floor is required
+            </span> -->
+          </div>
+
+          <div class="form-group col-md-4" [class.has-error]="fullUnitControl.invalid && fullUnitControl.touched"
+            [class.has-success]="fullUnitControl.valid">
+            <label for="clinicname" class="control-label">Unit No.</label>
+            <input type="text" class="form-control" id="unitno" name="unit" #fullUnitControl="ngModel"
+              [(ngModel)]="service.userBillingAddress.unitNo" aria-describedby="unitnoHelp">
+            <!-- <span class="help-block" style="color: red;" *ngIf="fullUnitControl.invalid && fullUnitControl.touched">
+              Unit No is required
+            </span> -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="clinicname">Building Name</label>
+            <input type="text" class="form-control" id="buildingname" name="building"
+              [(ngModel)]="service.userBillingAddress.buildingName" aria-describedby="builidingnameHelp">
+
+            <!-- <span class="help-block" style="color: red;"
+              *ngIf="fullBuildingControl.invalid && fullBuildingControl.touched">
+              Building Name is required
+            </span> -->
+          </div>
+
+          <div class="form-group col-md-6">
+            <label for="clinicname">Street Name</label>
+            <input type="text" class="form-control" id="streetname" name="street"
+              [(ngModel)]="service.userBillingAddress.streetName" aria-describedby="streetnameHelp">
+            <!-- <span class="help-block" style="color: red;"
+              *ngIf="fullStreetControl.invalid && fullStreetControl.touched">
+              Street Name is required
+            </span> -->
+          </div>
+        </div>
+        <div class="row">
+          <!-- <div class="form-group col-md-6">
+          <label class="control-label">Select Country </label><span class="asterick">*</span>
+          <br>
+          <select type="text" placeholder="Enter Customer Name" [(ngModel)]="service.userBillingAddress.country"
+            name="countryname" class="form-control">
+            <option value="" >Select Country</option>
+            <option [value]="item.id" *ngFor="let item of service.countryModel">
+              {{item.itemName}}
+            </option>
+          </select>
+        </div> -->
+          <div class="form-group col-md-6" [class.has-error]="fullStateControl.invalid && fullStateControl.touched"
+            [class.has-success]="fullPostalControl.valid">
+            <label for="clinicname" class="control-label">State <span style="color: red;">*</span> </label>
+            <input type="text" class="form-control" id="state" name="state" #fullStateControl="ngModel" required
+              [(ngModel)]="service.userBillingAddress.state" aria-describedby="statenameHelp">
+            <span class="help-block" style="color: red;" *ngIf="fullStateControl.invalid && fullStateControl.touched">
+              State is required
+            </span>
+          </div>
+          <div class="form-group col-md-6" [class.has-error]="fullPostalControl.invalid && fullPostalControl.touched"
+            [class.has-success]="fullPostalControl.valid">
+            <label for="clinicname" class="control-label">Postal <span style="color: red;">*</span> </label>
+            <input type="text" class="form-control" id="postalname" name="postal" #fullPostalControl="ngModel" required
+              [(ngModel)]="service.userBillingAddress.zip" aria-describedby="postalnameHelp">
+            <span class="help-block" style="color: red;" *ngIf="fullPostalControl.invalid && fullPostalControl.touched">
+              Postal Code is required
+            </span>
+          </div>
+        </div>
+        <!-- <div *ngIf="showNullError" style="color: red;
+      margin-bottom: 5px;">*All fields are required</div> -->
+        <button type="button" class="btn btn-primary" [disabled]="empForm.invalid" (click)="saveAddress()">Save Billing
+          Address</button>
+        <!-- <button type="button" class="btn btn-primary" >Save Billing Address</button> -->
+      </div>
+
+    </div>
+  </div>
+</form>

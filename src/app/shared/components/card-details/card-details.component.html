@@ -1,0 +1,293 @@
+<div class="container" *ngIf="service.carddisplay">
+  <div class="panel panel-primary cards-container">
+    <div class="card border box" style="padding: 15px" *ngIf="
+        service.cardselected &&
+        service.activeStep4 &&
+        !service.userVerifiedDisplay
+      ">
+      <div class="section-title">SELECT AN OPTION TO PAY</div>
+
+      <div>
+        <br />
+        <div>
+          <h6>Saved Card(s)</h6>
+
+          <br />
+          <div class="new-payment-option">
+            <div class="npayment-option">
+              <div class="payment-item">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div *ngFor="let iterator of savedPaymentsArr">
+                      <div class="radio-option">
+                        <input type="radio" name="cards" value="iterator.creditCard.last4" class="pointerCursor"
+                          (change)="onItemChange(iterator)" />&nbsp;<label for="radio" class="radioOpt">**** **** ****{{
+                          iterator.creditCard.last4 }}</label>
+                        <button *ngIf="isShow && selectedCard == iterator.id && service.selectPaymentCard"
+                          class="payBtn btn btn-primary" (click)="paySavedCard(iterator)">
+                          Pay RM {{ service.cardPayment | number : '1.2-2' }}
+                        </button>
+
+                        <input *ngIf="isShow && selectedCard == iterator.id && service.selectPaymentCard"
+                          [(ngModel)]="cvvNo" minlength="3" maxlength="3" required
+                          [ngClass]="isCvvErr == true ? 'cvvErr' : 'cvvNo'" type="text" placeholder="CVV"
+                          (keyup)="checkCvvNo($event)" />
+                        <hr />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <small *ngIf="savedPaymentsArr.length == 0">
+            You have no saved cards
+            <hr />
+          </small>
+
+          <div class="new-payment-option">
+            <div *ngIf="paymentArr.length > 0">
+              <h6>New Payment Options</h6>
+              <br />
+              <div class="npayment-option">
+                <div class="payment-item">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div *ngFor="let item of paymentArr">
+                        <div class="radio-option">
+                          <label class="radio-inline">
+                            <input type="radio" name="cards" value="item.value" (change)="creditCard(item)"
+                              class="pointerCursor" />
+                            <p>
+                              <b> {{ item.card }} </b>
+                            </p>
+                            <div class="paymnet-icon">
+                              <div class="col-md-1">
+                                <div class="img-wrap">
+                                  <img src="assets/images/visa.svg" alt="Card logo">
+                                </div>
+                              </div>
+                              <div class="col-md-1">
+                                <div class="img-wrap">
+                                  <img src="assets/images/mastercard.svg" alt="Card logo">
+                                </div>
+                              </div>
+                            </div>
+                          </label>
+                          <div class="ml-2 p-2" style="width: 80%;">
+                            <small style="font-size: 70%;">
+                              Visa, MasterCard and UnionPay
+                            </small>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="isCredit && service.selectedCreditCard == item">
+                          <div class="col-md-12 card-col">
+                            <hr />
+                            <form #cardForm="ngForm" class="paymentForm">
+                              <div *ngIf="isCredit && service.selectedCreditCard == item" style="margin-top: 15px">
+                                <div class="row">
+                                  <div class="form-group col-md-6" [class.has-error]="
+                                    nameControl.invalid && nameControl.touched
+                                  " [class.has-success]="nameControl.valid">
+                                    <label for="exampleInputEmail1" class="control-label">Card Holder Name</label>
+                                    <input type="text" class="form-control" #nameControl="ngModel" name="firstname"
+                                      required id="name" [(ngModel)]="service.card.name" aria-describedby="nameHelp" />
+
+                                    <span class="help-block" style="color: red"
+                                      *ngIf="nameControl.invalid && nameControl.touched">
+                                      Card Holder name is required
+                                    </span>
+                                  </div>
+
+                                  <div class="form-group col-md-6" [class.has-error]="
+                                    numberControl.invalid && numberControl.touched
+                                  " [class.has-success]="nameControl.valid">
+                                    <label for="exampleInputEmail1" class="control-label">Card Number</label>
+                                    <input type="text" class="form-control" id="name" name="cardnumber"
+                                      #numberControl="ngModel" required (ngModelChange)="checkNumberValidation($event)"
+                                      [(ngModel)]="service.card.cardNumber" minlength="16" maxlength="16"
+                                      (ngModelChange)="verifyCard($event)" aria-describedby="nameHelp" />
+                                    <span class="help-block" style="color: red" *ngIf="
+                                      numberControl.invalid && numberControl.touched
+                                    ">
+                                      Card Number is required
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="form-group col-md-3" [class.has-error]="
+                                    monthControl.invalid && monthControl.touched
+                                  " [class.has-success]="monthControl.valid">
+                                    <label for="clinicname" class="control-label">Month</label>
+                                    <select name="cars" id="cars" class="form-control"
+                                      [(ngModel)]="service.card.expirationMonth" required name="month"
+                                      #monthControl="ngModel">
+                                      <option value="01">01</option>
+                                      <option value="02">02</option>
+                                      <option value="03">03</option>
+                                      <option value="04">04</option>
+                                      <option value="05">05</option>
+                                      <option value="06">06</option>
+                                      <option value="07">07</option>
+                                      <option value="08">08</option>
+                                      <option value="09">09</option>
+                                      <option value="10">10</option>
+                                      <option value="11">11</option>
+                                      <option value="12">12</option>
+                                    </select>
+
+                                    <span class="help-block" style="color: red" *ngIf="
+                                      monthControl.invalid && monthControl.touched
+                                    ">
+                                      Month is required
+                                    </span>
+                                  </div>
+
+                                  <div class="form-group col-md-4" [class.has-error]="
+                                    yearControl.invalid && yearControl.touched
+                                  " [class.has-success]="yearControl.valid">
+                                    <label for="clinicname">Expiry Year</label>
+                                    <select name="year" id="year" class="form-control" required name="year"
+                                      #cardYearControl="ngModel" [(ngModel)]="service.card.expirationYear" required
+                                      name="year" #yearControl="ngModel">
+                                      <option></option>
+                                      <option *ngFor="let item of expireYears" value="{{ item }}">
+                                        {{ item }}
+                                      </option>
+                                    </select>
+                                    <span class="help-block" style="color: red"
+                                      *ngIf="yearControl.invalid && yearControl.touched">
+                                      Year is required
+                                    </span>
+                                  </div>
+
+                                  <div class="form-group col-md-5" [class.has-error]="
+                                    cvvControl.invalid && cvvControl.touched
+                                  " [class.has-success]="cvvControl.valid">
+                                    <label for="exampleInputEmail1">CVV</label>
+                                    <input type="password" class="form-control" id="name"
+                                      (ngModelChange)="checkChar($event, 'cvv')" required name="cvv"
+                                      #cvvControl="ngModel" [(ngModel)]="service.card.cvv" aria-describedby="nameHelp"
+                                      minlength="3" maxlength="3" />
+
+                                    <span class="help-block" style="color: red"
+                                      *ngIf="cvvControl.invalid && cvvControl.touched">
+                                      Valid CVV is required
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-md-3 mt-2" *ngIf="isCredit && service.selectedCreditCard">
+                                <span class="checkSavedCard">
+                                  <input type="checkbox" name="isActive" (ngModelChange)="cardChecked($event)"
+                                    value="SavedCard" [(ngModel)]="service.saveCardForUser" />&nbsp;Saved Card For
+                                  Future Payments</span>
+                              </div>
+                              <div class="col-md" *ngIf="isCredit">
+                                <button *ngIf="service.selectedCreditCard == item" [disabled]="cardForm.invalid"
+                                  class="btn btn-primary submit-btn mt-3 w-100" (click)="submit()">
+                                  Pay RM {{ service.cardPayment | number : '1.2-2' }}
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr />
+                <div class="payment-item">
+                  <div class="row">
+                    <div class="col-md-12">
+
+                      <div class="radio-option">
+                        <label class="radio-inline">
+                          <input type="radio" name="cards" class="radio-input iPay pointerCursor"
+                            (ngModelChange)="SelectIpayOption()" [(ngModel)]="ipay88" value="ipay88"
+                            [disabled]="service.cardPayment && service.cardPayment > 5000"
+                            [ngStyle]="service.cardPayment && service.cardPayment > 5000 ? {'cursor': 'not-allowed'} : '' " />
+                          <p>
+                            <b> iPay88 </b>
+                          </p>
+
+                          <div class="paymnet-icon">
+                            <img
+                              src="https://www.ipay88.com/wp-content/uploads/2019/12/iPay88_WideNTT_HighRes-putih-160x69-1.png"
+                              style="width: 80px;" />
+                          </div>
+
+                        </label>
+
+                        <div class="ml-2 p-2" style="width: 80%;">
+                          <small style="font-size: 70%;">
+                            iPay88 provides payment methods like Online banking ,
+                            E-wallet (GrabPay, ShopeePay & more)
+                          </small>
+                        </div>
+
+                        <div style="width: 80%; color: #63c7db;" class="mt-1"
+                          *ngIf="service.cardPayment && service.cardPayment > 5000">
+                          <small style="font-size: 70%; display: flex; align-items: center;">
+                            <i class="fa fa-info-circle text-danger" aria-hidden="true"
+                              style=" margin-right: 10px; font-size: 15px;"></i>
+                            <b style="font-weight: 600;"> This payment option will only be available for payment amounts
+                              up to RM 5,000.</b>
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="col-md" *ngIf="showipay88 && service.cardPayment && service.cardPayment <= 5000">
+                        <button class="btn btn-primary submit-btn mt-3 w-100" (click)="payWithIpay88()">
+                          Pay RM {{ service.cardPayment | number : '1.2-2' }}
+                        </button>
+                      </div>
+
+                      <div style="display: none;" *ngIf="previewHTML !== undefined">
+                        <span [innerHTML]="convertHTML.bypassSecurityTrustHtml(previewHTML)">
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <hr />
+                <div class="payment-item">
+                  <div class="row">
+                    <div class="col-md-12">
+
+                      <div class="radio-option">
+                        <label class="radio-inline">
+                          <input type="radio" class="cursor-pointer" name="cards" value="paypal" (ngModelChange)="SelectpaypalOption()"
+                            [(ngModel)]="payPal" value="payPal" />
+                          <p>
+                            <b> PayPal </b>
+                          </p>
+                          <div class="paymnet-icon">
+                            <img src="assets/images/icon/paypal.png" alt="paypal logo" style="height: 22px;">
+                          </div>
+                        </label>
+
+                        <div class="ml-2 p-2" style="width: 80%;">
+                          <small style="font-size: 70%;">
+                            Pay with PayPal. Safe and Secure
+                          </small>
+                        </div>
+                        <div *ngIf="orderservice.paypalDisplay" (click)="placeOrderFrompaypal()">
+                          <ngx-paypal [config]="paypalDetail"></ngx-paypal>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

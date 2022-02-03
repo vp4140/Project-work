@@ -1,0 +1,155 @@
+app-offers {
+  .offer-images {
+    padding: 25px;
+  }
+
+  .promo-wrapper {
+    padding: 0 10px;
+    margin-bottom: 50px;
+  }
+
+  .promotions-offer {
+    background: #f2f3f7;
+    padding-top: 50px;
+    width: 100%;
+  }
+  section.promotions-offer .container {
+    width: 100%;
+  }
+
+  .promotions-side-br {
+    float: left;
+    width: 100%;
+    line-height: 51px;
+    background: #fff;
+  }
+
+  h3.promotions-titles {
+    font-weight: 500;
+    font-size: 22px;
+    padding: 19px;
+    border-bottom: 2px solid #a8acb1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    // padding-top: 10px;
+    // margin-bottom: 0;
+  }
+
+  // ::ng-deep.slick-track {
+  //   width: auto !important;
+  //   background: red;
+  // }
+
+  // .carousel {
+  //   left: 0;
+  // }
+
+  .promotions-inr ul {
+    margin: 0;
+    padding: 0;
+  }
+  .promotions-inr ul li {
+    list-style: none;
+    // border-bottom: 2px solid #a8acb1;
+  }
+  .promotions-inr ul li a {
+    font-size: 16px;
+    color: #5c5f61;
+    text-decoration: none;
+  }
+
+  .slick-slider {
+    margin: auto;
+  }
+  .promotions-side-rt {
+    padding: 0 17px !important;
+  }
+  // .slick-slide img {
+  //   width: 100%;
+  //   // padding: 10px;
+  // }
+
+  body .slick-prev,
+  body .slick-next {
+    height: 45px;
+    width: 40px;
+
+    z-index: 100;
+  }
+  .accordion-button:not(.collapsed) {
+    background-color: white !important;
+  }
+
+  body .slick-next::before {
+    height: 19px;
+    width: 20px;
+    background: gray !important;
+    color: white !important;
+    border-radius: 50%;
+    // z-index: 100;
+  }
+  body .slick-prev::before {
+    height: 19px;
+    width: 20px;
+    background: gray !important;
+    color: white !important;
+    border-radius: 50%;
+    // z-index: 100;
+  }
+
+  li {
+    list-style: none;
+    //   border-bottom: 2px solid #a8acb1;
+  }
+
+  .accordion-body {
+    padding: 0;
+  }
+
+  .card-body {
+    color: white;
+  }
+  h3 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  h5 {
+    text-align: center;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+    // overflow: hidden;
+  }
+
+  #accordionExample {
+    margin-bottom: 10px;
+    padding: 0 !important;
+  }
+
+  button.slick-prev::before, button.slick-next::before{
+    color: #101316 !important;
+  }
+ 
+  // @media only screen and (min-width: 900px) {
+  //   .accordion-button {
+  //     display: none;
+  //   }
+  // }
+
+  // @media only screen and (max-width: 900px) {
+  //   .accordian-hide {
+  //     display: none;
+  //   }
+  //   .card {
+  //     width: auto !important;
+  //   }
+  // }
+
+  @media only screen and (max-width: 900px) {
+    .promotions-side-rt {
+      padding: 0 0px !important;
+    }
+  }
+}

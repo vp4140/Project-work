@@ -1,0 +1,90 @@
+<div class="container" *ngIf="service.userVerifiedDisplay">
+    <div class="panel panel-primary">
+        <div class="panel-heading pointerCursor" style="background-color: #63C7DB ;">
+
+            <h6 class="panel-title" style="padding:10px;color:white">
+                Mobile Number </h6>
+        </div>
+        <div class="card border box">
+            <div class="row" *ngIf="!readAccess">
+                <div class="form-group" style="padding-left: 30px;width: 100%;">
+                    <!-- <div  style="float: right; color: #63C7DB;">
+                    <countdown [config]="{leftTime: 10}" (event)="handleEvent($event)"></countdown>
+                </div> -->
+                    <br>
+                    <label for="clinicname" style="color: black;">Please Enter Mobile Number</label>
+                    <div class="row">
+                        <div class="col-md-3 col code-input">
+                            <select name="contactMethod" class="code-select" [(ngModel)]="countryRegion">
+                                <option value="+1">+1</option>
+                                <option value="+31">+31</option>
+                                <option value="+44">+44</option>
+                                <option value="+60">+60</option>
+                                <option value="+61">+61</option>
+                                <option value="+65">+65</option>
+                                <option value="+91">+91</option>
+                            </select>
+                            <!-- <input type="text" class=""  /> -->
+
+                        </div>
+                        <div class="col-md-4 col">
+                            <input class="form-control" placeholder="Mobile Number"
+                                [(ngModel)]="service.userMobileNumber">
+                        </div>
+                        <div class="col-md-3 col">
+                            <button type="button" class="btn btn-primary" (click)="verifyNumber()">Verify</button>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <br>
+            </div>
+
+            <div class="row" *ngIf="readAccess">
+
+                <div class="form-group col-md-12" style="padding-left: 30px;">
+
+                    <div style="float: right;color: #63C7DB;margin: 15px;">
+                        <countdown [config]="{leftTime: 60 , format:'mm:ss'}" (event)="handleEvent($event)"></countdown>
+                    </div>
+                    <br>
+                    <label for="clinicname" style="color: black;">Please Enter 6 - Digit Auth Code</label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="tel" 
+                            pattern="[0-9]*"
+                            class="form-control" id="mobilenumber" [(ngModel)]="authCode">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-primary sbmit" style="background-color: #63C7DB;"
+                                (click)="submitCode()">Submit</button>
+                               
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a (click)="changeMobNo()"style="font-size: 12px; cursor: pointer; color: #63C7DB;"><u>Change Mobile No.</u></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card user-verified-card" *ngIf="!service.userVerifiedDisplay">
+    <div class="row">
+        <div class="col-md-8">
+            <div style="display: flex;">
+                <div>Mobile Number Verified </div><span class="material-icons">done</span>
+            </div>
+            <div class="mobileNumber">{{countryIso.getShippingMobileNo()}}</div>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" style="background-color: #63C7DB; "
+                (click)="changeLogin()">Change</button>
+        </div>
+    </div>
+</div>

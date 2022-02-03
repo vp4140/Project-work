@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading pointerCursor" (click)="panleExpanded = !panleExpanded" style="background-color: #63c7db">
+      <h6 class="panel-title" style="padding: 10px; color: white">
+        Payment Method
+      </h6>
+    </div>
+    <!-- <div class="card"> -->
+    <!--  -->
+    <div class="card box payment-method-card" *ngIf="
+        panleExpanded && service.activeStep4 && !service.userVerifiedDisplay
+      ">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label *ngIf="walletDisplay" class="col-md-6 radio-inline pointerCursor" [ngStyle]="{
+              color: service.userPayOption == 'wallet' ? '#63C7DB' : '#506d8559'
+            }">
+            <input type="radio" value="wallet" name="payment" [(ngModel)]="userselected" class="radio-input"
+              (ngModelChange)="userChoice($event)" checked />
+            <i class="fas fa-wallet" style="padding-left: 10px"></i>
+            My Wallet
+          </label>
+          <!-- <label *ngIf="walletDisplay" class="col-md-2 radio-inline"
+            [ngStyle]="{'color':service.userPayOption == 'cod' ?  '#63C7DB': '#506d8559'}">
+            <input type="radio" value="cod" name="payment" [(ngModel)]="userselected" class="radio-input"
+              (ngModelChange)="userChoice($event)" />
+            <i class="fas fa-hand-holding-usd" style="padding-left:10px;"></i>
+            COD
+          </label> -->
+          <label class="col-md-6 radio-inline pointerCursor" *ngIf="walletDisplay" [ngStyle]="{
+              color:
+                service.userPayOption == 'paylater' ? '#63C7DB' : '#506d8559'
+            }">
+            <input type="radio" value="paylater" name="payment" [(ngModel)]="userselected" class="radio-input"
+              (ngModelChange)="userChoice($event)" />
+            <i class="fas fa-hand-holding-usd" style="padding-left: 10px"></i>
+            Pay Later
+          </label>
+
+        </div>
+      </div>
+
+      <div>
+        <div *ngIf="payoption == 'wallet'" class="col-md-12 wallet-card">
+          <div class="card-body payment-card-body">
+            <div class="row">
+              <table style="width: 100%; margin: 0 20px">
+                <tr>
+                  <th>Order Total</th>
+                  <td>
+                    {{ Userservice.curr }}
+                    {{ service.orderTotalWithoutTax | number: "1.2-2" }}
+                  </td>
+                </tr>
+                <tr *ngIf="service.promoApplied">
+                  <th>Wallet Discount</th>
+                  <td>{{ Userservice.curr }} {{ service.promoDiscount }}</td>
+                </tr>
+                <tr>
+                  <th>Delivery Charge</th>
+                  <td>{{ Userservice.curr }} {{ service.delieveryPrice }}</td>
+                </tr>
+                <tr>
+                  <th>Amount to be paid</th>
+                  <td>
+                    {{ Userservice.curr }}
+                    {{ service.orderTotal | number: "1.2-2" }}
+                  </td>
+                </tr>
+
+                <tr *ngIf="service.cardselected" style="border-bottom: 0">
+                  <th>Payment through Card/ iPay88 / PayPal</th>
+                  <td>
+                    {{ Userservice.curr }}
+                    {{ service.cardPayment | number: "1.2-2" }}
+                  </td>
+                </tr>
+              </table>
+              <table *ngIf="sectionDisplay" class="wallet-table">
+                <tr>
+                  <th *ngIf="service.walletBalance != 0">
+                    <input type="checkbox" name="isActive" value="1" [(ngModel)]="walletRadio"
+                      (ngModelChange)="walletBalanceCalculate($event)" class="pointerCursor" />
+                    <span>Use Wallet Balance</span>
+                  </th>
+                  <td *ngIf="service.walletBalance != 0">
+                    <strong>{{ Userservice.curr }}
+                      {{ service.walletBalance }}</strong>
+                  </td>
+                </tr>
+                <!-- hide for now-->
+                <tr *ngIf="service.addMoneyDisplay">
+                  <th>Top-up and Get Instant Cashback</th>
+                  <td>
+                    <button class="btn btn-primary topUpBtn" (click)="addMoney()">
+                      Top up Now
+                    </button>
+                  </td>
+                </tr>
+              </table>
+
+              <div *ngIf="walletPayButton" class="wallet-pay-btn" (click)="placeOrderFromWallet()">
+                <button class="btn btn-primary text-white">
+                  Pay {{ Userservice.curr }}
+                  {{ service.orderTotal | number: "1.2-2" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="payoption == 'cod'">
+        <div class="row cod-row">
+          <div class="col-md-2">
+            <img src="assets\images\icon\wallet.svg" />
+          </div>
+          <div class="col-md-8">
+            <h2>Pay by wallet and get extra <strong>Benefits</strong><br /></h2>
+          </div>
+        </div>
+        <div class="wallet-pay-btn" (click)="placeOrderFromCOD()">
+          <button class="btn btn-primary">Proceed</button>
+        </div>
+      </div>
+
+      <div *ngIf="payoption == 'paylater'">
+        <div class="wallet-pay-btn" *ngIf="paylaterButtonDispaly" (click)="placeOrderFromCOD()">
+          <button class="btn btn-primary">Pay with Pay-Later</button>
+        </div>
+        <div *ngIf="!paylaterButtonDispaly" style="text-align: -webkit-center" class="col-md-8">
+          <p style="color: #63c7db">{{ message }}</p>
+          <button class="btn btn-primary" (click)="contactUs()">
+            Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

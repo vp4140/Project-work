@@ -1,0 +1,190 @@
+<app-header></app-header>
+
+<div class="offer">
+  <div>
+    <img
+      src="https://lumier32.s3.ap-southeast-1.amazonaws.com/banner/best-deals.png"
+      alt="123"
+      height="100%"
+      width="100%"
+      style="margin-top: 5px"
+    />
+  </div>
+</div>
+
+<!-- newly added -->
+
+<section class="promotions-offer container-fluid">
+  <div class="row promo-wrapper">
+    <div class="col-xs-12 col-sm-12 col-md-3" id="accordionExample">
+      <div
+        style="background-color: white"
+        *ngIf="categories$ | async as categories"
+      >
+        <h2 class="" id="headingOne">
+          <!-- <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            <h3 style="color: black">Categories</h3>
+          </button> -->
+          <div
+            id="collapseOne"
+            class="accordion-collapse hideItem collapse accordion-body offer-option"
+            aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample"
+            *ngFor="let item of categories"
+          >
+            <li
+              class="p-2 cursor-pointer"
+              style="
+                white-space: nowrap;
+                font-size: 16px;
+                text-overflow: ellipsis;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
+                border-bottom: 2px solid #a8acb1;
+              "
+              (click)="showOffer(item.name)"
+            >
+              {{ item.name }}
+            </li>
+          </div>
+        </h2>
+
+        <div class="accordian-hide" *ngIf="categories && categories.length > 0">
+          <h3 style="padding-top: 13px">
+            <span style="padding-left: 10px">Categories</span>
+            <hr style="margin-bottom: 0" />
+          </h3>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show accordion-body offer-option"
+            aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample"
+            *ngFor="let item of categories"
+          >
+            <li
+              class="p-2 cursor-pointer"
+              style="
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
+                border-bottom: 2px solid #a8acb1;
+              "
+              (click)="showOffer(item.name)"
+            >
+              {{ item.name }}
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+
+      <a class="navbar-brand" href="#">Navbar</a>
+
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+        aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </nav> -->
+
+    <div
+      class="promotions-side-rt col-xs-12 col-sm-12 col-md-9 p-0"
+      id="slider"
+      *ngIf="categoriesArr && categoriesArr.length > 0"
+    >
+      <div
+        class="col"
+        style="background-color: #fff"
+        *ngFor="let item of categoriesArr"
+      >
+        <div
+          *ngIf="
+            item.subscriptionPromotion && item.subscriptionPromotion.length > 0
+          "
+          id="{{ item.name }}"
+        >
+          <h3 class="promotions-titles">{{ item.name }}</h3>
+
+          <ngx-slick-carousel
+            class="carousel"
+            #slickModal="slick-carousel"
+            [config]="slideConfig"
+          >
+            <div
+              ngxSlickItem
+              class="p-4"
+              *ngFor="let slide of item.subscriptionPromotion"
+            >
+              <div class="card offer-detail" *ngIf="slide.image !== ''">
+                <!-- <a href="{{openLink(slide)}}" > -->
+                <img
+                  src="{{ slide.image }}"
+                  alt=""
+                  height="auto"
+                  width="auto"
+                  class="img-fluid cursor-pointer"
+                  (click)="openLink(slide)"
+                />
+                <!-- </a> -->
+                <div
+                  class="card-body"
+                  [ngStyle]="{ 'background-color': item?.color }"
+                >
+                  <h5
+                    class="offer-title"
+                    [innerHTML]="
+                      convertHTML.bypassSecurityTrustHtml(slide.name)
+                    "
+                  ></h5>
+                </div>
+              </div>
+            </div>
+          </ngx-slick-carousel>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>

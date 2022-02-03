@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading pointerCursor" (click)="panleExpanded = !panleExpanded" style="background-color: #63c7db">
+      <h6 class="panel-title" style="padding: 10px; color: white">
+        Delivery Address
+      </h6>
+    </div>
+    <!--  -->
+    <div class="card box" *ngIf="
+        panleExpanded && service.activeStep3 && !service.userVerifiedDisplay
+      ">
+      <!-- <p-button label="Add New Address" style="background-color: #63C7DB;" (click)="showDialog()"></p-button>-->
+      <div class="row">
+        <div class="form-group col-md-12">
+          <div class="card">
+            <br />
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary" (click)="showDialog()" style="background-color: #63c7db">
+                Add New Address
+              </button>
+            </div>
+
+            <div class="card-body" *ngFor="let item of service.delieveryAddress">
+              <div class="row">
+                <div class="col-md-6 radio-box">
+                  <label class="radio-inline">
+                    <input type="radio" name="delieveryAddress" [(ngModel)]="service.userSelectDelieverAddress"
+                      (ngModelChange)="addressByUser($event)" value="{{ item.id }}" class="pointerCursor" />
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <div style="margin-left: 3px" class="address-title">
+                    {{ item.name }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="address-body col-md-7">
+                  {{ item.blockNo }} {{ item.floorNo }} {{ item.unitNo }}
+                  {{ item.buildingName }} {{ item.streetName }}
+                  {{ item.country }} {{ item.state }} {{ item.zip }}
+                </div>
+
+                <div class="col-md-5 edit-btn">
+                  <span (click)="editForm(item)" class="pointerCursor">Edit</span>
+                  <span (click)="delete(item.id)" class="pointerCursor">Delete</span>
+                  <!-- <i class="fas fa-edit" (click)="editForm(item)" style="float: right;padding-left: 10px;"></i>
+                  <i class="fas fa-trash-alt" (click)="delete(item.id)" style="float: right;"></i> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card info-card">
+            <div class="info-title">Delivery Information</div>
+            <div class="row">
+              <div class="card col-md-4 delivery" *ngFor="let item of service.alldeliveryData; let i = index">
+                <div class="card-body">
+                  <label class="radio-inline" style="margin-right: 5px">
+                    <input type="radio" name="{{ item.title }}" value="{{ item.id }}" [(ngModel)]="service.del"
+                      (ngModelChange)="deliverOptionChosenByUser(item, i)" class="pointerCursor" />
+                  </label>
+                  <div class="add-title">{{ item.title }}</div>
+                  <!-- <strong style="text-align: center;align-items: center;padding: 50px;"> {{item.deliveryCharge}}</strong> -->
+                  <!-- <br> -->
+                  <!-- <div style="font-size: small;">({{item.instructions}})</div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card info-card">
+            <div class="info-title">Delivery Instruction</div>
+            <!-- <h5 class="card-title">Delivery Instruction</h5> -->
+
+            <div>
+              <textarea pInputTextarea class="col-md-12" [(ngModel)]="service.orderStatusComments"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" (click)="Save()">
+              Save and Deliver here
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Add New Address" [(visible)]="service.dialogDisplay" styleClass="mydialog">
+  <app-billing-address></app-billing-address>
+</p-dialog>

@@ -1,0 +1,190 @@
+<app-header></app-header>
+<div>
+  <section class="get-equipment">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-8 equipment  ">
+          <div class="equipment-inner">
+            <div class="product-list-header">
+              <div class="main">
+                <p class="Show-product filter"> My Cart ({{productCount}}) </p>
+                <p class="listing-name clearr_all ml-auto" style="cursor: pointer;" *ngIf="DeleteRow"
+                  (click)="  deleteselectedRow()"><i class="fa fa-trash" aria-hidden="true"></i> Delete..</p>
+                <div class="listing-name clearr_all dropdown ml-auto" *ngIf="MarkALLRow">
+                  <p id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span style="font-size: 25px;">...</span>
+                  </p>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="cursor: pointer;">
+                    <a class="dropdown-item" (click)="checkAllselect()">Mark</a>
+                    <a class="dropdown-item" [(ngModel)]="isMasterSel" [ngModelOptions]="{standalone: true}"
+                      (click)="checkAll()">Mark ALL</a>
+                    <!-- <a class="dropdown-item" (onHeaderCheckboxToggle)="yourFunction($event)">hello</a> -->
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+            <div class="detail-outer variant-table">
+              <div class="container">
+                <form [formGroup]="cartForm">
+                  <p-table [value]="CartDetails" [responsive]="false">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th *ngIf="checkbox"></th>
+                        <th *ngIf="checkboxselect"></th>
+
+                        <th></th>
+                        <th class="text-center" style="width: 30%;">Product Name</th>
+
+                        <th class="text-center">Price ({{service.curr}})</th>
+                        <th class="text-center">Quantity</th>
+                        <th style="text-align: center;">Total ({{service.curr}})</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-cart let-index="rowIndex">
+
+                      <ng-container formArrayName="quantities">
+                        <tr [formGroupName]="index">
+                          <td class="text-center" *ngIf="checkbox">
+                            <input type="checkbox" [(ngModel)]="cart.isSelected" [ngModelOptions]="{standalone: true}"
+                              name="test" value="{{cart.id}}" (change)="isAllSelected()" />
+                          </td>
+                          <td class="text-center" style="width: 3em;" *ngIf="checkboxselect">
+                            <input type="checkbox" name="deletecheck" value="{{cart.id}}"
+                              (click)="selectID(cart.id,$event)" />
+                          </td>
+
+                          <td class="product-detail">
+
+                            <img [src]="cart?.product?.productImage[0]?.image" alt="product image" width="60%"
+                              height="60px"> <i class="fa fa-bookmark" aria-hidden="true"></i>
+                          </td>
+                          <td class="text-center">
+                            <div class="card-product-list">
+                              <a href="{{navigateToProduct(cart.product)}}">
+                                {{cart?.product?.productName}} </a>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <p class="discount-price">{{service.curr}} {{cart?.product?.MRP}}</p>
+                            <p class="origin-price" *ngIf="cart?.product?.isSale"><del>{{service.curr}}
+                                {{cart?.product?.sellPrice}}</del></p>
+                          </td>
+                          <td class="text-center">
+
+                            <div class="add-cart-input add-cart">
+                              <button type="button" [disabled]="quantities()?.controls[0]?.value?.quantity == 0 "
+                                (click)="removeQty(cart?.id,index)"><i class="fas fa-minus"></i></button>
+                              <input type="text" formControlName="quantity" (input)="ceckName(index)" name="test" id="">
+                              <button type="button" (click)="addQty(index,cart.product.sellerProducts[0].quantity)"><i
+                                  class="fas fa-plus"></i></button>
+                            </div>
+                            <div *ngIf="cart.quantityDisplay">
+                              <button type="button" class="custom-button add-cart-btn"
+                                *ngIf="quantities().controls[index].value?.quantity != 0"
+                                (click)="addProductToCart(index)">
+                                Add to cart
+                              </button>
+                            </div>
+                            <div *ngIf="!cart.quantityDisplay">
+                              <span style="color: crimson;">Out Of Stock</span>
+                              <button type="button" class="custom-button add-cart-btn"
+                                (click)="RemoveDeleteID(cart?.id,$event)">
+                                Remove
+                              </button>
+                            </div>
+                          </td>
+                          <td class="crttotal" style="text-align: center;">{{cart?.total | number : '1.2-2'}} </td>
+                        </tr>
+                      </ng-container>
+                    </ng-template>
+                  </p-table>
+                  <div *ngIf="productCount ==0">
+                    <p>No Items in the cart</p>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-4 equipment" *ngIf="proceedToSectionDisplay">
+          <div class="equipment-inner">
+            <div class="product-list-header-PRICE">
+              <div class="main">
+                <p class="Show-product">PRICE DETAILS</p>
+
+              </div>
+            </div>
+            <div class="product-list-header outer-header">
+              <div class="main">
+                <p class="Show-product"> Price&nbsp;({{index}} items)</p>
+                <p class="listing-name  ml-auto" style="font-weight: 400;"> {{service.curr}} {{totalamount | number :
+                  '1.2-2'}}
+                </p>
+              </div>
+            </div>
+
+            <div class="product-list-header outer-header">
+              <div class="main">
+                <p class="Show-product"> Discount&nbsp;</p>
+                <p class="listing-name  ml-auto" style="font-weight: 400;"> {{service.curr}}
+                  {{checkService.promoDiscount}}
+                </p>
+              </div>
+            </div>
+            <div class="product-list-header outer-header ">
+              <div class="main">
+                <p class="Show-product">TOTAL AMOUNT</p>
+                <p class="listing-name  ml-auto">{{service.curr}} {{totalamountAfterDiscount | number : '1.2-2'}}
+
+                </p>
+              </div>
+            </div>
+            <div class="product-list-header  ">
+              <div class="btns">
+                <input type="text" class="custom-button secondary" [(ngModel)]="code" name="test"
+                  placeholder="Enter Coupon Code">
+                <!-- <button class="custom-button secondary">Enter Coupon Code</button> -->
+                <div class="row">
+                  <button *ngIf="codeDisplay" class="custom-button" (click)="applyOffer()">Apply</button>
+                  <button *ngIf="!codeDisplay" type="button" (click)="removeOffer()"
+                    class="btn btn-danger">Remove</button>
+                  <!-- <button *ngIf="!codeDisplay"class="custom-button"  (click)="removeOffer()">Remove</button> -->
+                </div>
+              </div>
+            </div>
+            <div class="product-list-header ">
+              <p class="save_order">You will save {{service.curr}} {{checkService.promoDiscount}} on this order</p>
+            </div>
+            <div class="product-list-header ">
+              <button class="submit-button" *ngIf="proceedToSectionDisplay" (click)="proceedPayment()">Proceed to
+                Payment</button>
+
+            </div>
+            <br>
+            <div class="product-list-header ">
+              <button *ngIf="quoteDisplay" class="submit-quote-button" (click)="getQuote()">Request For Quote</button>
+
+            </div>
+            <!-- <div class="product-list-header ">
+              <p class="away_order">You are,{{service.curr}} 100 away from <a href="git #"><span class="gold_loan">GOLD
+                    PLAN</span></a></p>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm-box" style="width: auto;">
+      <p-confirmDialog key="confirm-drop-database" header="Delete" acceptLabel="Yes" rejectLabel="No"
+        [(visible)]="confirmDropDatabaseDialogVisible"></p-confirmDialog>
+    </div>
+
+  </section>
+</div>
+<!-- <app-common-address></app-common-address>
+<app-card-details></app-card-details> -->
+<app-footer></app-footer>
